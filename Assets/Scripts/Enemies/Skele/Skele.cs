@@ -11,7 +11,7 @@ public class Skele : MonoBehaviour
     [SerializeField]
     private float movementSpeed;
     [SerializeField]
-    private EdgeCollider2D swordCollider;
+    private EdgeCollider2D skeleswordCollider;
     [SerializeField]
     private Transform leftEdge;
     [SerializeField]
@@ -22,7 +22,6 @@ public class Skele : MonoBehaviour
     // private variables
     private Canvas healthCanvas;
     private SpriteRenderer spriteRenderer;
-    private Vector2 startPos;
     private ISkeleState currentState;
     private bool facingRight;
 
@@ -30,7 +29,7 @@ public class Skele : MonoBehaviour
     public GameObject Target { get; set; }
     public Rigidbody2D MyRigidbody { get; set; }
     public Animator MyAnimator { get; set; }
-    public EdgeCollider2D SwordCollider { get { return swordCollider; } }
+    public EdgeCollider2D SkeleSwordCollider { get { return skeleswordCollider; } }
     public bool Attack { get; set; }
     public bool TakingDamage { get; set; }
     public bool IsDead { get { return healthStat.CurrentVal <= 0; } }
@@ -67,9 +66,8 @@ public class Skele : MonoBehaviour
         currentState.OnTriggerEnter(collider);
     }
 
-    private IEnumerator TakeDamage()
+    public IEnumerator TakeDamage()
     {
-        if (!healthCanvas.isActiveAndEnabled) { healthCanvas.enabled = true; }
         healthStat.CurrentVal -= 10;
         if (!IsDead)
         {
@@ -102,7 +100,6 @@ public class Skele : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         MyAnimator = GetComponent<Animator>();
         healthStat.Initialize();
-        startPos = transform.position;
         Player.Instance.Dead += new DeadEventHandler(RemoveTarget);
         ChangeState(new SkeleIdleState());
         healthCanvas = transform.GetComponentInChildren<Canvas>();
@@ -142,7 +139,7 @@ public class Skele : MonoBehaviour
             else if (currentState is SkeleMeleeState)
             {
                 Target = null;
-                ChangeState(new SkeleIdleState);
+                ChangeState(new SkeleIdleState());
             }
         }
     }
@@ -169,7 +166,7 @@ public class Skele : MonoBehaviour
 
     public void MeleeAttack()
     {
-        SwordCollider.enabled = true;
+        SkeleSwordCollider.enabled = true;
     }
 
     

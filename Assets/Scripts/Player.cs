@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D MyRigidbody { get; set; }
     public Animator MyAnimator { get; set; }
     public EdgeCollider2D SwordCollider { get { return swordCollider; } }
+    public bool Immortal { get { return immortal; } set { this.immortal = value; } }
     public bool Attack { get; set; }
     public bool TakingDamage { get; set; }
     public bool OnHeart { get; set; }
@@ -99,16 +100,16 @@ public class Player : MonoBehaviour
     // handles the taking damage part of the player
     public IEnumerator TakeDamage()
     {
-        if (!immortal)
+        if (!Immortal)
         {
             healthStat.CurrentVal -= 10;
             if (!IsDead)
             {
                 MyAnimator.SetTrigger("takingDamage");
-                immortal = true;
+                Immortal = true;
                 StartCoroutine(IndicateImmortal());
                 yield return new WaitForSeconds(immortalTime);
-                immortal = false;
+                Immortal = false;
             }
             else
             {
@@ -118,10 +119,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void MeleeAttack()
+    {
+        SwordCollider.enabled = true;
+    }
+
     // Blinks the player on and off
     private IEnumerator IndicateImmortal()
     {
-        while (immortal)
+        while (Immortal)
         {
             spriteRenderer.enabled = false;
             yield return new WaitForSeconds(.1f);

@@ -9,6 +9,7 @@ public class BlockBehavior : StateMachineBehaviour {
     {
         animator.GetComponent<Player>().TakingDamage = false;
         animator.SetFloat("speed", 0);
+        Player.Instance.Immortal = true;
         Player.Instance.MyRigidbody.velocity = Vector3.zero;
     }
 
@@ -20,6 +21,7 @@ public class BlockBehavior : StateMachineBehaviour {
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        Player.Instance.Immortal = false;
         animator.ResetTrigger("block");
 	}
 

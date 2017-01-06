@@ -9,7 +9,7 @@ public class AttackBehavior : StateMachineBehaviour
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<Player>().Attack = true;
-        animator.GetComponent<Player>().SwordCollider.enabled = true;
+        Player.Instance.MeleeAttack();
         animator.SetFloat("speed", 0);
         Player.Instance.MyRigidbody.velocity = Vector3.zero;
     }
@@ -23,7 +23,7 @@ public class AttackBehavior : StateMachineBehaviour
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<Player>().Attack = false;
-        animator.GetComponent<Player>().SwordCollider.enabled = false;
+        Player.Instance.SwordCollider.enabled = false;
         animator.ResetTrigger("attack");
     }
 
